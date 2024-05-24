@@ -1,0 +1,110 @@
+[3]: Lc = pd.read_csv('/kaggle/input/loan-dataset/loan_lending.csv')
+Lc.head(10)
+
+[114]: Lc.info()
+
+[115]: Lc.describe()
+
+[116]: plt.figure(figsize=(10,1))
+sns.boxplot(data=Lc['annual_inc'],orient='h',palette = 'Set2')
+plt.show()
+
+[125] : plt.figure(figsize=(10,1))
+sns.boxplot(data=Lc['annual_inc_Olfree'],orient='h',palette = 'Set2')
+plt.show()
+
+
+[118]:q3 = Lc['annual_inc'].quantile(0.75)
+q3
+
+[119] :q1 = Lc['annual_inc'].quantile(0.25)
+q1
+
+[120]:IQR = q3-q1
+IQR
+
+[121]:lower_range = q1-(1.5*IQR)
+Upper_range = q3+(1.5*IQR)
+
+lower_range
+
+
+[123]:annual_inc_Olfree=[]
+for i in Lc['annual_inc']:
+    if (i<lower_range):
+        annual_inc_Olfree.append(lower_range)
+    elif i> Upper_range:
+        annual_inc_Olfree.append(Upper_range)
+    else:
+        annual_inc_Olfree.append(i)
+
+[124]:Lc['annual_inc_Olfree']= annual_inc_Olfree
+
+[81]:Lc['annual_inc_Olfree']= annual_inc_Olfree
+
+[126]:dti_dummy = Lc['dti'].fillna(Lc['dti'].mean())
+
+[127]:Lc['dti_dummy']=dti_dummy
+Lc
+
+[131]: Lc['home_ownership'] = Lc['home_ownership'].fillna(Lc['home_ownership'].mode()[0])
+
+[134]:Lc.drop(columns =['dti'],inplace =True)
+
+[136]:Lc['bad_loan'].value_counts()
+
+[5]:plt.figure(figsize =(6,3))
+ax =sns.countplot(data = Lc,x=Lc['bad_loan'],width = .6,saturation =.70)
+ax.bar_label(ax.containers[0])
+plt.xticks([1,0],["Bad_Loan","Good_loan"])
+plt.title("Bad_Loan VS Good Loan")
+plt.show()
+
+[139]:corrln =Lc[[ 'emp_length_num'
+       , 'last_delinq_none', 'revol_util',
+       'total_rec_late_fee', 'od_ratio', 'bad_loan', 'annual_inc_Olfree',
+       'dti_dummy']].corr()
+
+[140]: plt.figure(figsize=(10,4))
+
+sns.heatmap(corrln,annot =True,cmap= 'coolwarm')
+plt.show
+
+[163]: import matplotlib.pyplot as plt
+import seaborn as sns
+
+plt.figure(figsize=(6,5))
+as_plot = sns.countplot(data=Lc, x='grade', hue='bad_loan', order=['A', 'B', 'C', 'D', 'E', 'F'])
+
+# Add bar labels for each container
+for container in as_plot.containers:
+    as_plot.bar_label(container)
+
+plt.show()
+
+[157]:
+home_counts = Lc['home_ownership'].value_counts()
+plt.pie(x =home_counts,labels =home_counts.index,autopct ='%1.1f%%',startangle =90)
+plt.title("")
+plt.show()
+
+[160]: plt.figure(figsize =(6,5))
+ab =pd.crosstab(Lc['home_ownership'],Lc['bad_loan']).plot(kind='bar')
+ab.bar_label(ab.containers[0])
+ab.bar_label(ab.containers[1])
+plt.title('Churn by Home_owner_Ship')
+plt.ylabel('Churn_freuency')
+plt.show()
+
+[144]:Lc['annual_inc_Olfree'].hist()
+plt.xlabel("Salary")
+plt.ylabel('Frequency')
+plt.show()
+
+[155]: plt.figure(figsize=(10,4))
+sns.regplot(data=Lc, y='bad_loan', x='annual_inc_Olfree', color='#054907').set(title='Regression Plot - Loudness vs Energy Correlation')
+plt.show()
+
+[4]: plt.figure(figsize=(20,4))
+sns.countplot(data = Lc,x ='purpose',hue = 'term')
+plt.show()
